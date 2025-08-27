@@ -1,0 +1,93 @@
+import RestaurantCard from "./RestaurantCard";
+// import { resList } from "../utils/resData";
+import { use, useEffect, useState } from "react";
+// import { ShimmerPostList } from "react-shimmer-effects";
+import ShimmerUi from "./ShimmerUi";
+
+const Main = () => {
+  const [originalResList, setOriginalResList] = useState([]);
+  const [newResList, setNewResList] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
+  //
+  useEffect(() => {
+    setTimeout(() => {
+      fetchData();
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    const filteredRes = originalResList.filter((res) => {
+      return res.itemName.toLowerCase().includes(inputValue.toLowerCase());
+    });
+    setNewResList(filteredRes);
+  }, [inputValue]);
+
+  // fetching data of restaurants from API
+  const fetchData = async () => {
+    const resData = await fetch(
+      "https://fakerestaurantapi.runasp.net/api/Restaurant/items"
+    );
+
+    const result = await resData.json();
+
+    setOriginalResList(result);
+    setNewResList(result);
+  };
+
+  return (
+    <main>
+      <section className="search">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Find your taste "
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            console.log(e.target.value);
+          }}
+          value={inputValue}
+        />
+        {/* <button onClick={() => {}}>Search</button> */}
+      </section>
+      {newResList.length > 0 ? (
+        <>
+          <div className="filter-btn">
+            <button
+              onClick={() => {
+                setNewResList(
+                  newResList.filter((res) => Number(res.restaurantID) > 10)
+                );
+              }}
+            >
+              Highest rates Restaurant
+            </button>
+            <button
+              onClick={() => {
+                setNewResList(originalResList);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+          <section className="res-container">
+            {newResList.map((res) => (
+              <RestaurantCard
+                key={res.itemID}
+                name={res.itemName}
+                rating={res.restaurantID}
+                img={res.imageUrl}
+                cuisines={res.itemDescription}
+                price={res.itemPrice}
+              />
+            ))}
+          </section>
+        </>
+      ) : (
+        <ShimmerUi />
+      )}
+    </main>
+  );
+};
+
+export default Main;

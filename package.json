@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.8.2",
+    "react-shimmer-effects": "^1.0.4"
+  },
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "react",
+  "default": "App.js",
+  "devDependencies": {
+    "parcel": "^2.15.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "parcel index.html"
+  },
+  "author": "rajeev",
+  "license": "ISC"
+}
